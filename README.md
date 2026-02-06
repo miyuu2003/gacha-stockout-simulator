@@ -52,8 +52,69 @@
 ---
 
 ## 技術スタック
+- フロントエンド: React + Vite
+- バックエンド: Java + Spring Boot（REST API）
+- リポジトリ構成: モノレポ（`frontend/` と `backend/` を分離）
+- デプロイ: フロントは静的ホスティング、バックはAPIサーバーで分離（MVPは同一サーバー配信でも可）
 
 
 ---
 
 ## ディレクトリ構成
+```
+gacha-stockout-simulator/
+  frontend/                 # React + Vite
+    src/
+    public/
+    index.html
+    package.json
+    vite.config.ts
+  backend/                  # Java + Spring Boot
+    src/
+      main/
+        java/
+        resources/
+      test/
+    build.gradle            # or pom.xml
+    settings.gradle
+  docs/                     # モデル設計・仕様メモ
+  README.md
+```
+
+---
+
+## AWSデプロイ手順（できるだけ無料）
+無料枠（新Free Tierのクレジット制）を最大限使う前提の「EC2 1台でフロント＋バックをまとめて運用」構成の例です。
+学習目的でEC2を使い、コストは停止運用と小サイズで抑える想定です。
+
+### 1. AWSアカウント作成と無料枠確認
+- AWS無料枠（12か月のFree Tier）を確認
+- 請求アラート（AWS Budgets）を作成
+
+### 2. EC2インスタンス作成
+1. EC2で小さめのインスタンスを作成（例: `t3.micro`）
+2. セキュリティグループで `80/443` を開放
+3. SSHでログインできるように設定
+
+### 3. バック（Spring Boot）をEC2で起動
+1. `backend` をビルド  
+   - `./gradlew bootJar`（または `mvn package`）
+2. EC2にアプリを配置
+3. `java -jar` で起動
+4. `http://<EC2のIP>:8080` でAPI疎通確認
+
+### 4. フロント（React）をEC2で配信
+1. `frontend` をビルド  
+   - `npm run build`
+2. Nginxをインストールして静的配信
+3. `/` は `frontend/dist` を配信
+4. `/api` はSpring Bootへリバースプロキシ（Nginx設定）
+
+### 5. 本番動作の確認
+- ブラウザでEC2のIPへアクセスし、画面が出るか確認
+- フロントからAPIを叩いて結果が返るか確認
+
+### 無料枠での注意点
+- 新Free Tierはクレジット制（6か月 or 上限消費まで）
+- EC2は常時起動でクレジット消費が早いので、使わない時は停止
+- ログ（CloudWatch）やEBSの容量も課金対象になるため注意
