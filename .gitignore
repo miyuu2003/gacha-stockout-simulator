@@ -13,3 +13,16 @@ frontend/yarn-error.log*
 frontend/pnpm-debug.log*
 frontend/lerna-debug.log*
 frontend/.DS_Store
+
+## backend (Spring Boot / Gradle)
+backend/.gradle/
+backend/build/
+backend/out/
+backend/target/
+backend/*.class
+backend/*.log
+backend/.DS_Store
+backend/.idea/
+backend/.project
+backend/.classpath
+backend/.settings/
