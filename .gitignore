@@ -26,3 +26,5 @@ backend/.idea/
 backend/.project
 backend/.classpath
 backend/.settings/
+
+*.pem
