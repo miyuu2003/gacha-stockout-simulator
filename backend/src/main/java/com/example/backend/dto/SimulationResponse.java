@@ -9,6 +9,8 @@ public class SimulationResponse {
     //出力パラメーターフィールド
     private OffsetDateTime soldOutAt;
     private double soldOutProbability;
+    private List<RemainingProbabilityPoint> remainingProbabilityByTime;
+    private List<InventoryPoint> inventorySeries;
     private List<String> recommendations;
     private Meta meta;
 
@@ -21,6 +23,16 @@ public class SimulationResponse {
         int runs,
         Integer seed,
         OffsetDateTime generatedAt
+    ) {}
+
+    public record RemainingProbabilityPoint(
+        OffsetDateTime time,
+        double remainingProbability
+    ) {}
+
+    public record InventoryPoint(
+        OffsetDateTime time,
+        int expectedRemaining
     ) {}
 
     //getter-setter
@@ -36,6 +48,20 @@ public class SimulationResponse {
     }
     public void setSoldOutProbability(double soldOutProbability) {
         this.soldOutProbability = soldOutProbability;   
+    }
+
+    public List<RemainingProbabilityPoint> getRemainingProbabilityByTime() {
+        return remainingProbabilityByTime;
+    }
+    public void setRemainingProbabilityByTime(List<RemainingProbabilityPoint> remainingProbabilityByTime) {
+        this.remainingProbabilityByTime = remainingProbabilityByTime;
+    }
+
+    public List<InventoryPoint> getInventorySeries() {
+        return inventorySeries;
+    }
+    public void setInventorySeries(List<InventoryPoint> inventorySeries) {
+        this.inventorySeries = inventorySeries;
     }
 
     public List<String> getRecommendations() {

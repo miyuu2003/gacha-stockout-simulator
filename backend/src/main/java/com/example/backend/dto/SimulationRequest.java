@@ -11,6 +11,9 @@ public class SimulationRequest {
     private OffsetDateTime releaseAt;
     private String storeType;
     private Integer initialStock;
+    private Boolean snsBoostEnabled;
+    private Integer simulationHours;
+    private Integer timeBucketMinutes;
     private Integer runs;
     private Integer seed;
 
@@ -51,6 +54,27 @@ public class SimulationRequest {
     }
     public void setInitialStock(Integer initialStock) {
         this.initialStock = initialStock;
+    }
+
+    public Boolean getSnsBoostEnabled() {
+        return snsBoostEnabled;
+    }
+    public void setSnsBoostEnabled(Boolean snsBoostEnabled) {
+        this.snsBoostEnabled = snsBoostEnabled;
+    }
+
+    public Integer getSimulationHours() {
+        return simulationHours;
+    }
+    public void setSimulationHours(Integer simulationHours) {
+        this.simulationHours = simulationHours;
+    }
+
+    public Integer getTimeBucketMinutes() {
+        return timeBucketMinutes;
+    }
+    public void setTimeBucketMinutes(Integer timeBucketMinutes) {
+        this.timeBucketMinutes = timeBucketMinutes;
     }
 
     public Integer getRuns() {
