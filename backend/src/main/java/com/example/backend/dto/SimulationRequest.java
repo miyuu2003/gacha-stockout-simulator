@@ -1,6 +1,5 @@
 package com.example.backend.dto;
 import java.time.OffsetDateTime;
-
 /**
  * POST /api/v1/simulations リクエスト内容
  * JSON -> Javaオブジェクト へ自動変換される（Jackson）
@@ -8,10 +7,12 @@ import java.time.OffsetDateTime;
 public class SimulationRequest {
     //入力パラメーターフィールド
     private String productName;
-    private Strinf popularity;
+    private String popularity;
     private OffsetDateTime releaseAt;
     private String storeType;
     private Integer initialStock;
+    private Integer runs;
+    private Integer seed;
 
     //引数なしコンストラクタ
     public SimulationRequest() {}
@@ -44,11 +45,25 @@ public class SimulationRequest {
     public void setStoreType(String storeType) {
         this.storeType = storeType;
     }
-    
+
     public Integer getInitialStock() {
         return initialStock;
     }
     public void setInitialStock(Integer initialStock) {
         this.initialStock = initialStock;
+    }
+
+    public Integer getRuns() {
+        return runs;
+    }
+    public void setRuns(Integer runs) {
+        this.runs = runs;
+    }
+
+    public Integer getSeed() {
+        return seed;
+    }
+    public void setSeed(Integer seed) {
+        this.seed = seed;
     }
 }

@@ -64,7 +64,7 @@ ssh-ec2: check-ec2
 ec2-setup-dirs: check-ec2
 	ssh -i "$(EC2_KEY)" "$(EC2_USER)@$(EC2_HOST)" \
 	"sudo mkdir -p $(REMOTE_BACKEND_DIR) $(REMOTE_FRONTEND_DIR) && \
-	 sudo chown -R $(EC2_USER):$(EC2_USER) /opt/gacha /var/www/gacha"
+	sudo chown -R $(EC2_USER):$(EC2_USER) /opt/gacha /var/www/gacha"
 
 deploy-frontend: check-ec2 package-frontend
 	scp -i "$(EC2_KEY)" -r frontend/dist/* "$(EC2_USER)@$(EC2_HOST):$(REMOTE_FRONTEND_DIR)/"

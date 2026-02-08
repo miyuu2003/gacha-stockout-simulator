@@ -9,7 +9,7 @@ public class SimulationResponse {
     //出力パラメーターフィールド
     private OffsetDateTime soldOutAt;
     private double soldOutProbability;
-    private List<OffsetDateTime> recommendations;
+    private List<String> recommendations;
     private Meta meta;
 
     //引数なしコンストラクタ
@@ -22,7 +22,7 @@ public class SimulationResponse {
         Integer seed,
         OffsetDateTime generatedAt
     ) {}
-    
+
     //getter-setter
     public OffsetDateTime getSoldOutAt() {
         return soldOutAt;
@@ -38,10 +38,10 @@ public class SimulationResponse {
         this.soldOutProbability = soldOutProbability;   
     }
 
-    public List<OffsetDateTime> getRecommendations() {
+    public List<String> getRecommendations() {
         return recommendations;
     }
-    public void setRecommendations(List<OffsetDateTime> recommendations) {
+    public void setRecommendations(List<String> recommendations) {
         this.recommendations = recommendations;
     }
 
