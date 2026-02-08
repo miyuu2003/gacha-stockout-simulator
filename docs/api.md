@@ -1,7 +1,7 @@
 # API仕様（MVP）
 
 本ドキュメントは `gacha-stockout-simulator` のバックエンド API 仕様（ver.1）を定義する。
-実装と差分が出た場合は、実装に合わせて追記する。
+DTO（Request/Response）の詳細は `docs/dto.md` を参照。
 
 ## 1. 基本方針
 
@@ -10,6 +10,7 @@
 - 文字コード: UTF-8
 - 日時フォーマット: RFC 3339（例: `2026-02-07T10:00:00+09:00`）
 - タイムゾーン: リクエストで明示しない場合は `Asia/Tokyo`
+- Content-Type: `application/json`
 
 ## 2. ベースURL
 
@@ -73,6 +74,7 @@
 - Method: `POST`
 - Path: `/simulations`（フルパス: `/api/v1/simulations`）
 - 説明: 条件を入力し、在庫推移と枯渇予測を返す（同期実行）
+- DTO定義: docs/dto.md を参照（Request/Responseのフィールド・型）
 
 ### リクエスト
 
@@ -92,17 +94,10 @@
 ```
 
 ### バリデーション
-
-- `productName`: 1-100 文字
-- `popularity`: `LOW | MEDIUM | HIGH`
-- `releaseAt`: RFC 3339 の日時（必須）
-- `storeType`: `LARGE | STATION | SMALL`
-- `initialStock`: `1` 以上
-- `snsBoostEnabled`: boolean
-- `simulationHours`: `1` 以上 `72` 以下
-- `timeBucketMinutes`: `5 | 10 | 15 | 30 | 60`
-- `runs`: `100` 以上 `10000` 以下
-- `seed`: 省略可（再現性が必要な場合に指定）
+※ 制約値・許容値は docs/dto.md の定義に従う。
+- バリデーション失敗時は 422 Unprocessable Entity を返す
+- エラーボディは「4.2 異常系（共通エラー形式）」に従う
+- enum 不正（例: popularity が LOW|MEDIUM|HIGH 以外）も 422 扱い
 
 ### レスポンス
 
@@ -135,9 +130,9 @@
 
 ### 補足
 
-- `soldOutAt` は、シミュレーション期間内に売り切れ見込みがない場合 `null`
-- `remainingProbabilityByTime` はフロントの時系列グラフ表示用
-- `inventorySeries` は平均在庫推移（MVP）
+- soldOutAt は、シミュレーション期間内に売り切れ見込みがない場合 null
+- soldOutProbability は、シミュレーション期間内で売り切れる確率
+- remainingProbabilityByTime / inventorySeries はフロントの時系列グラフ表示用
 
 ## 6. フロント連携メモ
 
