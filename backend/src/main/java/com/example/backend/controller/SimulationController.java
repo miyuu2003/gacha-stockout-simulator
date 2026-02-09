@@ -3,6 +3,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.backend.service.SimulationService;
 import com.example.backend.dto.SimulationRequest;
 import com.example.backend.dto.SimulationResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -16,7 +17,7 @@ public class SimulationController {
     }
 
     @PostMapping("/simulations")
-    public SimulationResponse run(@RequestBody SimulationRequest req) {
+    public SimulationResponse run(@Valid @RequestBody SimulationRequest req) {
         return simulationService.run(req);
     }
 }

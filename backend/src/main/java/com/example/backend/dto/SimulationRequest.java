@@ -1,20 +1,45 @@
 package com.example.backend.dto;
 import java.time.OffsetDateTime;
+import jakarta.validation.constraints.*;
 /**
  * POST /api/v1/simulations リクエスト内容
  * JSON -> Javaオブジェクト へ自動変換される（Jackson）
  */
 public class SimulationRequest {
     //入力パラメーターフィールド
+    @NotBlank
+    @Size(max = 100)
     private String productName;
-    private String popularity;
+
+    @NotNull
+    private Popularity popularity;
+
+    @NotNull
     private OffsetDateTime releaseAt;
-    private String storeType;
+
+    @NotNull
+    private StoreType storeType;
+
+    @NotNull
+    @Min(1)
     private Integer initialStock;
+
+    @NotNull
     private Boolean snsBoostEnabled;
+
+    @NotNull
+    @Min(1)
+    @Max(72)
     private Integer simulationHours;
+
+    @NotNull
     private Integer timeBucketMinutes;
+
+    @NotNull
+    @Min(100)
+    @Max(10000)
     private Integer runs;
+
     private Integer seed;
 
     //引数なしコンストラクタ
@@ -28,10 +53,10 @@ public class SimulationRequest {
         this.productName = productName;
     }
 
-    public String getPopularity() {
+    public Popularity getPopularity() {
         return popularity;
     }
-    public void setPopularity(String popularity) {
+    public void setPopularity(Popularity popularity) {
         this.popularity = popularity;
     }
 
@@ -42,10 +67,10 @@ public class SimulationRequest {
         this.releaseAt = releaseAt;
     }
 
-    public String getStoreType() {
+    public StoreType getStoreType() {
         return storeType;
     }
-    public void setStoreType(String storeType) {
+    public void setStoreType(StoreType storeType) {
         this.storeType = storeType;
     }
 
