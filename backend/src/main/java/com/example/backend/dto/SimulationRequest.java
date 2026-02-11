@@ -33,6 +33,7 @@ public class SimulationRequest {
     private Integer simulationHours;
 
     @NotNull
+    @AllowedTimeBucketMinutes
     private Integer timeBucketMinutes;
 
     @NotNull
