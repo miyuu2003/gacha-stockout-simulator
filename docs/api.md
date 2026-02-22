@@ -97,7 +97,7 @@ DTO（Request/Response）の詳細は `docs/dto.md` を参照。
 ※ 制約値・許容値は docs/dto.md の定義に従う。
 - バリデーション失敗時は 422 Unprocessable Entity を返す
 - エラーボディは「4.2 異常系（共通エラー形式）」に従う
-- enum 不正（例: popularity が LOW|MEDIUM|HIGH 以外）も 422 扱い
+- enum 不正（例: popularity が LOW|MEDIUM|HIGH 以外）や日時フォーマット不正は 400 Bad Request 扱い
 
 ### レスポンス
 

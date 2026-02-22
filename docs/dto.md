@@ -49,6 +49,7 @@ API 全体の仕様は `docs/api.md` を参照。
 
 - `HTTP 422 Unprocessable Entity` を返す
 - レスポンス形式は `docs/api.md` の「4.2 異常系」に従う
+- JSON構文不正や JSON→DTO 変換失敗（enum不正、日時フォーマット不正など）は `HTTP 400 Bad Request`
 
 ### Request 例
 
