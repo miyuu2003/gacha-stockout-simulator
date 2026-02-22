@@ -47,8 +47,8 @@ DTO（Request/Response）の詳細は `docs/dto.md` を参照。
 ### 4.3 主なHTTPステータス
 
 - `200 OK`: 正常
-- `400 Bad Request`: JSON形式不正
-- `422 Unprocessable Entity`: バリデーションエラー
+- `400 Bad Request`: リクエストが解釈できない（malformed JSON / enum不正 / 日時フォーマット不正 など）
+- `422 Unprocessable Entity`: バリデーションエラー（@Valid の制約違反）
 - `500 Internal Server Error`: サーバー内部エラー
 
 ## 5. エンドポイント

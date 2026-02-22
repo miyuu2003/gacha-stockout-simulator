@@ -11,7 +11,7 @@ public class HealthController {
     public Map<String, String> healthCheck() {
         return Map.of(
             "status", "UP",
-            "service", "backend",
+            "service", "gacha-stockout-backend",
             "time", OffsetDateTime.now().toString()
         );
     } 

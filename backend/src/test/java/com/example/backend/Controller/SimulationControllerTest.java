@@ -19,19 +19,18 @@ class SimulationControllerTest {
     @Autowired
     private MockMvc mockMvc;
     /**
-     * ヘルスチェックおよびシミュレーションAPIの統合テストを最低限のみ実装
-     * GET /api/v1/health が 200 を返す
-     * POST /api/v1/simulations 正常リクエストで 200 を返す
-     * POST /api/v1/simulations バリデーション不正（initialStock 欠落）で 422 を返す
-     * 
-     * 今後、サービス層のモック化や異常系テストなどを追加予定
+     * ヘルスチェックおよびシミュレーションAPIの統合テスト
+     * - GET /api/v1/health の正常応答
+     * - POST /api/v1/simulations の正常系
+     * - POST /api/v1/simulations の 422（@Valid制約違反）
+     * - POST /api/v1/simulations の 400（malformed JSON / enum不正 / 日時フォーマット不正）
      */
     @Test
     void health_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/v1/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"))
-                .andExpect(jsonPath("$.service").value("backend"));
+                .andExpect(jsonPath("$.service").value("gacha-stockout-backend"));
     }
 
     @Test
@@ -80,6 +79,77 @@ class SimulationControllerTest {
                         .content(invalidRequestBody))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                .andExpect(jsonPath("$.details").isArray());
+    }
+
+    @Test
+    void simulations_shouldReturn400_whenJsonIsMalformed() throws Exception {
+        String malformedJson = """
+                {
+                  "productName": "人気キャラコレクションVol.1",
+                  "popularity": "HIGH",
+                  "releaseAt": "2026-02-10T10:00:00+09:00",
+                  "storeType": "LARGE",
+                  "initialStock": 120,
+                  "snsBoostEnabled": true,
+                  "simulationHours": 24,
+                  "timeBucketMinutes": 30,
+                  "runs": 1000
+                """;
+
+        mockMvc.perform(post("/api/v1/simulations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(malformedJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_JSON"))
+                .andExpect(jsonPath("$.details").isArray());
+    }
+
+    @Test
+    void simulations_shouldReturn400_whenEnumValueIsInvalid() throws Exception {
+        String invalidEnumBody = """
+                {
+                  "productName": "人気キャラコレクションVol.1",
+                  "popularity": "VERY_HIGH",
+                  "releaseAt": "2026-02-10T10:00:00+09:00",
+                  "storeType": "LARGE",
+                  "initialStock": 120,
+                  "snsBoostEnabled": true,
+                  "simulationHours": 24,
+                  "timeBucketMinutes": 30,
+                  "runs": 1000
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/simulations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidEnumBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_FORMAT"))
+                .andExpect(jsonPath("$.details").isArray());
+    }
+
+    @Test
+    void simulations_shouldReturn400_whenDateFormatIsInvalid() throws Exception {
+        String invalidDateBody = """
+                {
+                  "productName": "人気キャラコレクションVol.1",
+                  "popularity": "HIGH",
+                  "releaseAt": "2026/02/10 10:00:00",
+                  "storeType": "LARGE",
+                  "initialStock": 120,
+                  "snsBoostEnabled": true,
+                  "simulationHours": 24,
+                  "timeBucketMinutes": 30,
+                  "runs": 1000
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/simulations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidDateBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_FORMAT"))
                 .andExpect(jsonPath("$.details").isArray());
     }
 }
